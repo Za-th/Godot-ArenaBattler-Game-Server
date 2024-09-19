@@ -40,7 +40,6 @@ func _on_stop_pressed():
 		server_running = false
 		network.peer_connected.disconnect(_Peer_Connected)
 		network.peer_disconnected.disconnect(_Peer_Disconnected)
-		# TODO fix
 		for peer_id in multiplayer.get_peers():
 			# TODO send disconnection to peers
 			RemovePlayer(peer_id)
