@@ -1,0 +1,104 @@
+[gd_scene load_steps=4 format=3 uid="uid://csq0lsax0rws1"]
+
+[ext_resource type="Script" path="res://GameServer.gd" id="1_jvr0p"]
+[ext_resource type="Script" path="res://PlayerVerification.gd" id="2_gu7ht"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_grr0p"]
+font_size = 100
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jvr0p")
+
+[node name="PlayerVerification" type="Node" parent="."]
+script = ExtResource("2_gu7ht")
+
+[node name="VerificationExpiration" type="Timer" parent="PlayerVerification"]
+wait_time = 15.0
+
+[node name="Menu" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PortInput" type="LineEdit" parent="Menu"]
+layout_mode = 2
+text = "9999"
+placeholder_text = "Port"
+
+[node name="MaxPlayersInput" type="LineEdit" parent="Menu"]
+layout_mode = 2
+text = "10"
+placeholder_text = "Max Players"
+
+[node name="Start" type="Button" parent="Menu"]
+layout_mode = 2
+text = "Start"
+
+[node name="Stop" type="Button" parent="Menu"]
+layout_mode = 2
+text = "Stop"
+
+[node name="Started" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -272.0
+offset_top = -127.0
+offset_right = 272.0
+offset_bottom = 127.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "STARTED"
+label_settings = SubResource("LabelSettings_grr0p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Loaded Level" type="Node" parent="."]
+
+[node name="Hub Level" type="Node3D" parent="Loaded Level"]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Loaded Level/Hub Level"]
+_spawnable_scenes = PackedStringArray("res://player_character.tscn")
+spawn_path = NodePath("..")
+
+[node name="CreatureSpawner" type="MultiplayerSpawner" parent="Loaded Level/Hub Level"]
+_spawnable_scenes = PackedStringArray("res://creatures/bird.tscn", "res://creatures/cat.tscn", "res://creatures/dog.tscn", "res://creatures/rat.tscn")
+spawn_path = NodePath("..")
+
+[node name="Test Level" type="Node3D" parent="Loaded Level"]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Loaded Level/Test Level"]
+_spawnable_scenes = PackedStringArray("res://player_character.tscn")
+spawn_path = NodePath("..")
+
+[node name="CreatureSpawner" type="MultiplayerSpawner" parent="Loaded Level/Test Level"]
+_spawnable_scenes = PackedStringArray("res://creatures/bird.tscn", "res://creatures/cat.tscn", "res://creatures/dog.tscn", "res://creatures/rat.tscn")
+spawn_path = NodePath("..")
+
+[node name="Tutorial Level" type="Node3D" parent="Loaded Level"]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Loaded Level/Tutorial Level"]
+_spawnable_scenes = PackedStringArray("res://player_character.tscn")
+spawn_path = NodePath("..")
+
+[node name="CreatureSpawner" type="MultiplayerSpawner" parent="Loaded Level/Tutorial Level"]
+_spawnable_scenes = PackedStringArray("res://creatures/bird.tscn", "res://creatures/cat.tscn", "res://creatures/dog.tscn", "res://creatures/rat.tscn")
+spawn_path = NodePath("..")
+
+[node name="TokenExpiration" type="Timer" parent="."]
+wait_time = 15.0
+
+[connection signal="timeout" from="PlayerVerification/VerificationExpiration" to="PlayerVerification" method="_on_verification_expiration_timeout"]
+[connection signal="pressed" from="Menu/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Menu/Stop" to="." method="_on_stop_pressed"]
+[connection signal="timeout" from="TokenExpiration" to="." method="_on_token_expiration_timeout"]
