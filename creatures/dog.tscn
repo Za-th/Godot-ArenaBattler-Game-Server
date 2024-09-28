@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://d16d802rmyupe"]
+[gd_scene load_steps=3 format=3 uid="uid://d16d802rmyupe"]
+
+[ext_resource type="Script" path="res://PathingController.gd" id="1_d2ocm"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_7oalb"]
 properties/0/path = NodePath(".:position")
@@ -9,6 +11,7 @@ properties/1/spawn = true
 properties/1/replication_mode = 1
 
 [node name="Dog" type="Node3D"]
+script = ExtResource("1_d2ocm")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_7oalb")

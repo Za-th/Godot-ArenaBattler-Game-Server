@@ -38,13 +38,8 @@ func _OnConnectionSucceeded() -> void:
 
 @rpc("authority", "call_remote")
 func ReceiveLoginToken(username:String, token:String) -> void:
-	print("Received token " + token)
-	# check if player has an account
-	if gameserver.PlayerExists(username):
-		# check if player has already logged in
-		if !gameserver.PlayerLoggedIn(username):
-			gameserver.expected_tokens[token] = username
-		else:
-			print("User " + username + " tried to connect but already logged in")
+	# check if player has already logged in
+	if !gameserver.PlayerLoggedIn(username):
+		gameserver.expected_tokens[token] = username
 	else:
-		print("User " + username + " tried to connect but account doesn't exist")
+		print("User " + username + " tried to connect but already logged in")

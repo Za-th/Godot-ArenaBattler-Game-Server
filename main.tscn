@@ -44,6 +44,10 @@ text = "Start"
 layout_mode = 2
 text = "Stop"
 
+[node name="Test" type="Button" parent="Menu"]
+layout_mode = 2
+text = "Test"
+
 [node name="Started" type="Label" parent="."]
 visible = false
 layout_mode = 1
@@ -63,35 +67,11 @@ label_settings = SubResource("LabelSettings_grr0p")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Loaded Level" type="Node" parent="."]
-
-[node name="Hub Level" type="Node3D" parent="Loaded Level"]
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Loaded Level/Hub Level"]
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player_character.tscn")
 spawn_path = NodePath("..")
 
-[node name="CreatureSpawner" type="MultiplayerSpawner" parent="Loaded Level/Hub Level"]
-_spawnable_scenes = PackedStringArray("res://creatures/bird.tscn", "res://creatures/cat.tscn", "res://creatures/dog.tscn", "res://creatures/rat.tscn")
-spawn_path = NodePath("..")
-
-[node name="Test Level" type="Node3D" parent="Loaded Level"]
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Loaded Level/Test Level"]
-_spawnable_scenes = PackedStringArray("res://player_character.tscn")
-spawn_path = NodePath("..")
-
-[node name="CreatureSpawner" type="MultiplayerSpawner" parent="Loaded Level/Test Level"]
-_spawnable_scenes = PackedStringArray("res://creatures/bird.tscn", "res://creatures/cat.tscn", "res://creatures/dog.tscn", "res://creatures/rat.tscn")
-spawn_path = NodePath("..")
-
-[node name="Tutorial Level" type="Node3D" parent="Loaded Level"]
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Loaded Level/Tutorial Level"]
-_spawnable_scenes = PackedStringArray("res://player_character.tscn")
-spawn_path = NodePath("..")
-
-[node name="CreatureSpawner" type="MultiplayerSpawner" parent="Loaded Level/Tutorial Level"]
+[node name="CreatureSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://creatures/bird.tscn", "res://creatures/cat.tscn", "res://creatures/dog.tscn", "res://creatures/rat.tscn")
 spawn_path = NodePath("..")
 
@@ -101,4 +81,5 @@ wait_time = 15.0
 [connection signal="timeout" from="PlayerVerification/VerificationExpiration" to="PlayerVerification" method="_on_verification_expiration_timeout"]
 [connection signal="pressed" from="Menu/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="Menu/Stop" to="." method="_on_stop_pressed"]
+[connection signal="pressed" from="Menu/Test" to="." method="_on_test_pressed"]
 [connection signal="timeout" from="TokenExpiration" to="." method="_on_token_expiration_timeout"]
