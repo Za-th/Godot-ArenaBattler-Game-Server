@@ -1,10 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://csq0lsax0rws1"]
+[gd_scene load_steps=6 format=3 uid="uid://csq0lsax0rws1"]
 
 [ext_resource type="Script" path="res://GameServer.gd" id="1_jvr0p"]
 [ext_resource type="Script" path="res://PlayerVerification.gd" id="2_gu7ht"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_grr0p"]
 font_size = 100
+
+[sub_resource type="LabelSettings" id="LabelSettings_6hpdv"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_0yoco"]
+properties/0/path = NodePath("Scoreboard:text")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -22,6 +29,7 @@ script = ExtResource("2_gu7ht")
 wait_time = 15.0
 
 [node name="Menu" type="VBoxContainer" parent="."]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -44,10 +52,6 @@ text = "Start"
 layout_mode = 2
 text = "Stop"
 
-[node name="Test" type="Button" parent="Menu"]
-layout_mode = 2
-text = "Test"
-
 [node name="Started" type="Label" parent="."]
 visible = false
 layout_mode = 1
@@ -67,19 +71,29 @@ label_settings = SubResource("LabelSettings_grr0p")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://player_character.tscn")
-spawn_path = NodePath("..")
-
-[node name="CreatureSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://creatures/bird.tscn", "res://creatures/cat.tscn", "res://creatures/dog.tscn", "res://creatures/rat.tscn")
-spawn_path = NodePath("..")
+[node name="Scoreboard" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+label_settings = SubResource("LabelSettings_6hpdv")
 
 [node name="TokenExpiration" type="Timer" parent="."]
 wait_time = 15.0
 
+[node name="Characters" type="Node3D" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Characters"]
+_spawnable_scenes = PackedStringArray("res://player/player_character.tscn")
+spawn_path = NodePath("..")
+
+[node name="CreatureSpawner" type="MultiplayerSpawner" parent="Characters"]
+_spawnable_scenes = PackedStringArray("res://creatures/bird.tscn", "res://creatures/cat.tscn", "res://creatures/dog.tscn", "res://creatures/rat.tscn")
+spawn_path = NodePath("..")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_0yoco")
+
 [connection signal="timeout" from="PlayerVerification/VerificationExpiration" to="PlayerVerification" method="_on_verification_expiration_timeout"]
 [connection signal="pressed" from="Menu/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="Menu/Stop" to="." method="_on_stop_pressed"]
-[connection signal="pressed" from="Menu/Test" to="." method="_on_test_pressed"]
 [connection signal="timeout" from="TokenExpiration" to="." method="_on_token_expiration_timeout"]

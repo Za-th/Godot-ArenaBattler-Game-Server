@@ -1,6 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://bb8df653v5sy8"]
+[gd_scene load_steps=9 format=3 uid="uid://bb8df653v5sy8"]
 
-[ext_resource type="Script" path="res://PathingController.gd" id="1_rj26i"]
+[ext_resource type="Script" path="res://CharacterController.gd" id="1_rj26i"]
+[ext_resource type="Script" path="res://player/AbilityVisuals.gd" id="2_rkstb"]
+[ext_resource type="Script" path="res://player/Hurtbox.gd" id="2_sappk"]
+[ext_resource type="Script" path="res://misc scripts/HealthbarProgress.gd" id="3_jkwx4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rynep"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_oxxbg"]
+radius = 4.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_uwdx6"]
+properties/0/path = NodePath("TextureProgressBar:value")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aqw8a"]
 properties/0/path = NodePath(".:position")
@@ -11,7 +24,48 @@ properties/1/spawn = true
 properties/1/replication_mode = 1
 
 [node name="Cat" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_rj26i")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+script = ExtResource("2_sappk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+shape = SubResource("BoxShape3D_rynep")
+
+[node name="AbilityHitboxes" type="Node3D" parent="."]
+visible = false
+
+[node name="Bleed" type="Area3D" parent="AbilityHitboxes"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AbilityHitboxes/Bleed"]
+shape = SubResource("SphereShape3D_oxxbg")
+
+[node name="MultiAttack" type="Area3D" parent="AbilityHitboxes"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AbilityHitboxes/MultiAttack"]
+shape = SubResource("SphereShape3D_oxxbg")
+
+[node name="Hiss" type="Area3D" parent="AbilityHitboxes"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AbilityHitboxes/Hiss"]
+shape = SubResource("SphereShape3D_oxxbg")
+
+[node name="AbilityVisuals" type="Node3D" parent="."]
+script = ExtResource("2_rkstb")
+
+[node name="Healthbar" type="Node" parent="."]
+
+[node name="SubViewport" type="Node" parent="Healthbar"]
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Healthbar/SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
+value = 100.0
+script = ExtResource("3_jkwx4")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Healthbar/SubViewport"]
+replication_config = SubResource("SceneReplicationConfig_uwdx6")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_aqw8a")

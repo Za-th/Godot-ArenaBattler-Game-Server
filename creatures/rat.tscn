@@ -1,6 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://lk6bnql58i4"]
+[gd_scene load_steps=11 format=3 uid="uid://lk6bnql58i4"]
 
-[ext_resource type="Script" path="res://PathingController.gd" id="1_kkm8w"]
+[ext_resource type="Script" path="res://CharacterController.gd" id="1_kkm8w"]
+[ext_resource type="Script" path="res://player/Hurtbox.gd" id="2_5ocie"]
+[ext_resource type="Script" path="res://player/AbilityVisuals.gd" id="2_v5gdq"]
+[ext_resource type="Script" path="res://misc scripts/HealthbarProgress.gd" id="3_wy775"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ab42a"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_u6jl3"]
+radius = 4.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bd1hy"]
+radius = 4.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qwcjv"]
+radius = 2.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ltn0u"]
+properties/0/path = NodePath("TextureProgressBar:value")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_b5dpg"]
 properties/0/path = NodePath(".:position")
@@ -11,7 +30,50 @@ properties/1/spawn = true
 properties/1/replication_mode = 1
 
 [node name="Rat" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_kkm8w")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+script = ExtResource("2_5ocie")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+shape = SubResource("BoxShape3D_ab42a")
+
+[node name="AbilityHitboxes" type="Node3D" parent="."]
+
+[node name="Lightning" type="Area3D" parent="AbilityHitboxes"]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AbilityHitboxes/Lightning"]
+shape = SubResource("SphereShape3D_u6jl3")
+
+[node name="SpeedDebuff" type="Area3D" parent="AbilityHitboxes"]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AbilityHitboxes/SpeedDebuff"]
+shape = SubResource("SphereShape3D_bd1hy")
+
+[node name="Stun" type="Area3D" parent="AbilityHitboxes"]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AbilityHitboxes/Stun"]
+shape = SubResource("SphereShape3D_qwcjv")
+
+[node name="AbilityVisuals" type="Node3D" parent="."]
+script = ExtResource("2_v5gdq")
+
+[node name="Healthbar" type="Node" parent="."]
+
+[node name="SubViewport" type="Node" parent="Healthbar"]
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Healthbar/SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
+value = 100.0
+script = ExtResource("3_wy775")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Healthbar/SubViewport"]
+replication_config = SubResource("SceneReplicationConfig_ltn0u")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_b5dpg")

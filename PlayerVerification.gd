@@ -1,7 +1,6 @@
 extends Node
 
 @onready var main_interface:Control = get_parent()
-@onready var player_scene:PackedScene = preload("res://player_character.tscn")
 
 # String: float
 var awaiting_verification:Dictionary = {}

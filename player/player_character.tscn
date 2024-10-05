@@ -1,0 +1,77 @@
+[gd_scene load_steps=10 format=3 uid="uid://cpuouhxt3rbos"]
+
+[ext_resource type="Script" path="res://CharacterController.gd" id="1_rt1i3"]
+[ext_resource type="Script" path="res://player/Hurtbox.gd" id="2_nnhrj"]
+[ext_resource type="Script" path="res://player/AbilityVisuals.gd" id="2_qeq1x"]
+[ext_resource type="Script" path="res://misc scripts/HealthbarProgress.gd" id="3_rcf5p"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wlnby"]
+size = Vector3(1, 2.24915, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_lf3t2"]
+radius = 5.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3wmha"]
+size = Vector3(1, 1, 2)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_8kic2"]
+properties/0/path = NodePath("TextureProgressBar:value")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_r3voo"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_rt1i3")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
+script = ExtResource("2_nnhrj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12457, 0)
+shape = SubResource("BoxShape3D_wlnby")
+
+[node name="AbilityHitboxes" type="Node3D" parent="."]
+visible = false
+
+[node name="Heal" type="Area3D" parent="AbilityHitboxes"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AbilityHitboxes/Heal"]
+shape = SubResource("SphereShape3D_lf3t2")
+
+[node name="DamageBuff" type="Area3D" parent="AbilityHitboxes"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AbilityHitboxes/DamageBuff"]
+shape = SubResource("SphereShape3D_lf3t2")
+
+[node name="Attack" type="Area3D" parent="AbilityHitboxes"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AbilityHitboxes/Attack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1.5)
+shape = SubResource("BoxShape3D_3wmha")
+
+[node name="AbilityVisuals" type="Node3D" parent="."]
+script = ExtResource("2_qeq1x")
+
+[node name="Healthbar" type="Node" parent="."]
+
+[node name="SubViewport" type="Node" parent="Healthbar"]
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Healthbar/SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
+value = 100.0
+script = ExtResource("3_rcf5p")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Healthbar/SubViewport"]
+replication_config = SubResource("SceneReplicationConfig_8kic2")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_r3voo")
